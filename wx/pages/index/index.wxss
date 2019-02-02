@@ -1,4 +1,8 @@
 
+page{
+  background-color: #b0e5fd;
+}
+
 .user-info{
   margin: 0 40rpx;
   border-radius: 5%;
@@ -67,8 +71,8 @@
   left: 40rpx;
 }
 
-.journey:hover{
-  background-color: rgb(34, 126, 16);
+.con:hover{
+  background-color: rgb(51, 158, 19);
 }
 
 .journey-img{
