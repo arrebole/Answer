@@ -1,0 +1,146 @@
+
+.user-info{
+  margin: 0 40rpx;
+  border-radius: 5%;
+  background-color: #436ecc;
+  height: 300rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 用户名称 */
+.user-nickname{
+  text-align: center;
+  padding: 20rpx 0rpx;
+  color: #fff;
+}
+
+/* 用户头像 */
+.user-avatar{
+  height: 120rpx;
+  width: 120rpx;
+  align-self: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* 分数 */
+.user-score{
+  color: #fff;
+  font-size: 25rpx;
+  align-self: center;
+  margin: 10rpx;
+}
+
+
+
+.mod{
+  display: flex;
+  position: relative;
+}
+
+.mod-title1{
+  font-size: 40rpx;
+  margin: 5rpx;
+  color: #fff;
+}
+.mod-title2{
+  font-size: 40rpx;
+  margin: 5rpx;
+  text-align: right;
+  color: rgb(255, 255, 255);
+}
+
+.con{
+  display: inline-block;
+  padding: 30rpx;
+  border-radius: 5%;
+  width: 265rpx;
+}
+
+
+.journey{
+  height: 300rpx;
+  background-color: #2c94eb;
+  position: absolute;
+  top: -35rpx;
+  left: 40rpx;
+}
+
+.journey:hover{
+  background-color: rgb(34, 126, 16);
+}
+
+.journey-img{
+  margin-left: 60rpx;
+  margin-top: 20rpx;
+  height: 200rpx;
+  width: 200rpx;
+}
+
+.leader-board{
+  background-color: #05a0b4;
+  height: 230rpx;
+  position: absolute;
+  top: -35rpx;
+  right: 40rpx;
+}
+
+.leader-board-img{
+  height: 150rpx;
+  width: 200rpx;
+  margin-top: 40rpx;
+}
+
+.store{
+  position: absolute;
+  background-color: #465fb9;
+  top: 340rpx;
+  height: 150rpx;
+  left: 40rpx;
+}
+
+.store-img{
+  height: 120rpx;
+  width: 150rpx;
+  margin-left: 30rpx;
+  margin-top: -10rpx;
+}
+.friendBattle{
+  position: absolute;
+  background-color: #d35690;
+  top: 270rpx;
+  right: 40rpx;
+  height: 280rpx;
+}
+.friendBattle-img{
+  height: 180rpx;
+  width: 180rpx;
+  margin: 60rpx 0rpx -20rpx 40rpx;
+}
+.bank{
+  position: absolute;
+  background-color: #7f5bc7;
+  top:570rpx;
+  height: 200rpx;
+  left: 40rpx;
+}
+.bank-img{
+  height: 150rpx;
+  width: 150rpx;
+  margin-left: 120rpx;
+  margin-right: -30rpx;
+}
+.factory{
+  position: absolute;
+  background-color: #496ad3;
+  top: 620rpx;
+  right: 40rpx;
+  height: 220rpx;
+}
+
+.factory-img{
+  margin-top: 30rpx;
+  height: 150rpx;
+  width: 200rpx;
+}

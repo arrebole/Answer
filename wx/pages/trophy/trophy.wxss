@@ -1,0 +1,26 @@
+/* pages/trophy/trophy.wxss */
+.trophy-header{
+  height: 200rpx;
+  background-color: rgb(126, 81, 126);
+  border-radius: 5%;
+  margin: 10rpx 40rpx;
+  overflow: hidden;
+}
+
+.trophy-title{
+  text-align: center;
+  color: #fff;
+  margin: 30rpx;
+}
+.trophy-mod-title{
+  color: #fff;
+  text-align: center;
+  margin: 20rpx;
+} 
+.trophy-mod{
+  margin: 10rpx 60rpx;
+  height: 150rpx;
+  background-color: rgb(80, 165, 154);
+  border-radius: 5%;
+  overflow: hidden;
+}

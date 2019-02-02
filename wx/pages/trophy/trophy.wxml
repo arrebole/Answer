@@ -1,0 +1,22 @@
+<!--pages/trophy/trophy.wxml-->
+<view class='trophy-header'>
+  <view class='trophy-title'>头脑排位</view>
+</view>
+
+<navigator url='../answer/answer?difficult=1'>
+  <view class='trophy-mod'>
+    <view class='trophy-mod-title'>入门新手</view>
+  </view>
+</navigator>
+
+<navigator url='../answer/answer?difficult=2'>
+  <view class='trophy-mod'>
+    <view class='trophy-mod-title'>逐渐起步</view>
+  </view>
+</navigator>
+
+<navigator url='../answer/answer?difficult=3'>
+  <view class='trophy-mod'>
+    <view class='trophy-mod-title'>步入殿堂</view>
+  </view>
+</navigator>

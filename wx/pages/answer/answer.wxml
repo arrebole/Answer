@@ -1,0 +1,49 @@
+<!--pages/answer/answer.wxml-->
+
+
+<view class='answer-header'>
+
+  <view class='answer-user'>
+    <open-data class='answer-avatar'  type="userAvatarUrl"></open-data>
+    <view class='answer-user-score'>得分:{{ leftScore }}</view>
+  </view>
+
+  <view class='vs'> VS </view>
+
+  <view class='answer-user'>
+    <image class='answer-avatar' src='{{ rightAvatarUrl }}'></image>
+    <view class='answer-user-score'>得分:{{ rightScore }}</view>
+  </view>
+
+</view>
+
+<view wx-if="{{ isStart }}" class='isStart'>
+  <button type="warn" loading="true">加载中</button>
+</view>
+
+<view wx-if="{{ isInGame }}">
+  <view class='answer-question'>
+    <view class='question-topic'>{{ localQuestion.topic }}</view>
+  </view>
+
+  <button class="{{aCss}}" data-answer='a' type="primary" bindtap="reply">
+    {{ localQuestion.a }}
+  </button>
+
+  <button class="{{bCss}}" data-answer='b' type="primary" bindtap="reply">
+    {{ localQuestion.b }}
+  </button>
+
+  <button class="{{cCss}}" data-answer='c' type="primary" bindtap="reply">
+    {{ localQuestion.c }}
+  </button>
+
+  <button class="{{dCss}}" data-answer='d' type="primary" bindtap="reply">
+    {{ localQuestion.d }}
+  </button>
+
+</view>
+
+<view wx-if="{{ inFinish }}" class='answer-settle'>
+  结算中...
+</view>
