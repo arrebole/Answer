@@ -21,6 +21,6 @@ public class ProblemsetController {
     //只能使用get方法
     @GetMapping("/get")
     public List<ProblemsetModel> get(@RequestParam(value = "level", defaultValue = "1") int level, @RequestParam(value = "limit", defaultValue = "8") int limit) {
-        return ProblemsetFactory.getFromSql(8,limit);
+        return ProblemsetFactory.getFromSql(level,limit);
     }
 }
