@@ -3,20 +3,26 @@ package com.answer.service.util;
 
 import com.answer.service.model.ProblemsetModel;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 // 问题生成工厂
 public class ProblemsetFactory {
 
-    // 从数据库读取生成问题列表
-    public static List<ProblemsetModel> getFromSql(final int Level, final int limit) {
+    // 随机删选题目
+    public static List<Map<String,Object>> createProblemset(List<Map<String,Object>> list,int limit){
+        List<Map<String,Object>> problemset = new ArrayList<Map<String,Object>>();
+        Set<Integer> index = new HashSet<Integer>();
 
-        List<ProblemsetModel> local = new LinkedList<ProblemsetModel>();
-        for (long i = 0; i <= limit; i++) {
-            local.add(new ProblemsetModel(i,Level,"topic","solution","a","b","c","d"));
+        // 生成随机数索引
+        while (index.size()<limit){
+            index.add((int)(Math.random()*(list.size()-1)));
         }
-        return local;
+
+        // 删选题目
+        for(int i:index){
+            problemset.add(list.get(i));
+        }
+        return  problemset;
     }
 
 

@@ -9,7 +9,7 @@ public class ProblemsetModel {
     // 题目
     public String topic;
     // 答案
-    public String solution;
+    public int solution;
     // 选项
     public String optionA;
     public String optionB;
@@ -20,7 +20,7 @@ public class ProblemsetModel {
 
     }
 
-    public ProblemsetModel(long id, int level, String topic, String solution, String a, String b, String c, String d) {
+    public ProblemsetModel(long id, int level, String topic, int solution, String a, String b, String c, String d) {
         this.id = id;
         this.topic = topic;
         this.level = level;
