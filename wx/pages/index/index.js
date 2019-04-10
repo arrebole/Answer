@@ -9,8 +9,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    uid: 0,
-    score: 0
+    uid: app.globalData.userInfo.uid,
+    score: app.globalData.userInfo.score,
+    //用户是否授权
+    isAuthorizar: false,
   },
 
   // 跳转排行榜
@@ -26,70 +28,35 @@ Page({
    */
   onLoad: function(options) {
 
-    // 获取用户分数
-    this.fetchData();
-
   },
-
-  fetchData: function() {
-    // 获取uid
+  // 获取微信用户信息
+  bindGetWXUserInfo: function(e){
     this.setData({
-      uid: app.globalData.userInfo.uid
+      isAuthorizar : true
     })
+    app.globalData.userInfo.userName = e.detail.userInfo.nickName;
+    this.getServiceUserInfo(e.detail.userInfo.nickName);
+  },
 
-    // 从后端获取分数 【异步回调】
-    api.getUserScore(this.data.uid).then((res) => {
-      this.setData({
-        score: res
-      });
+  // 通过微信昵称 获取后端用户信息
+  getServiceUserInfo(userName){
+    
+    let getinfo = api.getServiceUserInfo(userName);
+    getinfo.then((res)=>{
+      app.globalData.userInfo.score = res.score;
+      app.globalData.userInfo.uid = res.uid;
+      app.userName = res.userName;
+      this.refreshData();
     })
-  },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
+    
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-    this.fetchData()
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function() {
-
+  // 同步页面数据
+  refreshData(){
+    this.setData({
+      uid:app.globalData.userInfo.uid,
+      score:app.globalData.userInfo.score,
+    })
   }
+  
 })

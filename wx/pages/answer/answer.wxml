@@ -26,20 +26,20 @@
     <view class='question-topic'>{{ localQuestion.topic }}</view>
   </view>
 
-  <button class="{{aCss}}" data-answer='a' type="primary" bindtap="reply">
-    {{ localQuestion.a }}
+  <button class="question-select-default" data-answer='a' type="primary" bindtap="reply">
+    {{ localQuestion.optionA }}
   </button>
 
-  <button class="{{bCss}}" data-answer='b' type="primary" bindtap="reply">
-    {{ localQuestion.b }}
+  <button class="question-select-default" data-answer='b' type="primary" bindtap="reply">
+    {{ localQuestion.optionB }}
   </button>
 
-  <button class="{{cCss}}" data-answer='c' type="primary" bindtap="reply">
-    {{ localQuestion.c }}
+  <button class="question-select-default" data-answer='c' type="primary" bindtap="reply">
+    {{ localQuestion.optionC }}
   </button>
 
-  <button class="{{dCss}}" data-answer='d' type="primary" bindtap="reply">
-    {{ localQuestion.d }}
+  <button class="question-select-default" data-answer='d' type="primary" bindtap="reply">
+    {{ localQuestion.optionD }}
   </button>
 
 </view>

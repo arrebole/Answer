@@ -19,11 +19,10 @@ public class AccountController {
     private JdbcTemplate jdbcTemplate;
 
     //通过uid获取用户分数
-    @GetMapping(value = "/getinfo/{uid}")
-    public Map<String,Object> getInfo(@PathVariable("uid") long uid) {
+    @GetMapping(value = "/{userName}")
+    public Map<String,Object> getInfo(@PathVariable("userName") String userName) {
         // 从数据库读取数据
-        String sql = String.format("select * from account WHERE BINARY uid=%1$s",uid);
-
+        String sql = String.format("select * from account WHERE userName = '%1$s'",userName);
         List<Map<String,Object>> dataList = jdbcTemplate.queryForList(sql);
 
         //如果不存在则返回错误
@@ -33,9 +32,8 @@ public class AccountController {
         return dataList.get(0);
     }
 
-
     // 通过uid修改分数
-    @PostMapping(value = "/setinfo/{uid}",produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/{uid}",produces = "application/json;charset=UTF-8")
     public Map<String,Object> setInfo(@PathVariable("uid") long uid, @RequestBody ModifyScoreModel post) {
         // 获取改动的数据
         int modify = post.modify;

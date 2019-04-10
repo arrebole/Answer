@@ -11,9 +11,9 @@ Page({
     // 难度
     difficult: 0,
     limit: 8,
-    isStart:true,
+    isStart: true,
     isInGame: false,
-    inFinish:false,
+    inFinish: false,
     uid: 0,
 
     // 头像路径
@@ -24,22 +24,23 @@ Page({
     rightScore: 0,
 
     // 题目
-    local: 0,
+    local: 0, //回答题目的数量
     localQuestion: null,
     questions: null,
 
-    // 样式
-    aCss: "question-select-default",
-    bCss: "question-select-default",
-    cCss: "question-select-default",
-    dCss: 'question-select-default',
+    map: {
+      '1': 'a',
+      '2': 'b',
+      '3': 'c',
+      '4': 'd',
+    }
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
     // 获取用户数据
     this.setData({
       uid: app.globalData.userInfo.uid,
@@ -50,21 +51,23 @@ Page({
 
     // 获取题目数据
     api.getQuestions(this.data.difficult, this.data.limit).then((data) => {
+      console.log(data)
       // 储存题库
       this.setData({
-        questions: data
+        questions: data,
+        limit: data.length,
       })
       // 取出第一题
       this.changeLocalQuestion()
     })
     // show页面
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setData({
-        isStart:false,
-        isInGame:true,
+        isStart: false,
+        isInGame: true,
 
       })
-    },2000)
+    }, 1000)
 
   },
   // 切换题目
@@ -73,9 +76,9 @@ Page({
     if (this.data.local >= this.data.limit) {
       this.setData({
         isInGame: false,
-        inFinish:true,
+        inFinish: true,
       })
-      api.postScore(this.data.uid, this.data.leftScore).then(() => {});
+      this.settlement(this.data.uid, this.data.leftScore)
 
       setTimeout(() => {
         wx.navigateBack({
@@ -90,13 +93,20 @@ Page({
     })
   },
 
+
+  // 结算
+  settlement(uid, score) {
+    api.postScore(uid, score).then(() => {});
+  },
+
+
   // 回答问题
   reply: function(event) {
 
     // 我方回答
     var q = event.currentTarget.dataset.answer
 
-    if (q == this.data.localQuestion.answer) {
+    if (q == this.data.map[this.data.localQuestion.solution]) {
       this.setData({
         leftScore: this.data.leftScore + this.data.difficult * 10
       })
@@ -110,73 +120,25 @@ Page({
       }
 
     }
-    // 敌方回答
-    var rand = Math.round(Math.random() * 10);
-    if (rand >= 5) {
-      this.setData({
-        rightScore: this.data.rightScore + this.data.difficult * 10
-      })
-    } else {
-      if (this.data.rightScore >= this.data.difficult * 5) {
+
+    setTimeout(() => {
+      // 敌方回答
+      var rand = Math.round(Math.random() * 10);
+      if (rand >= 5) {
         this.setData({
-          rightScore: this.data.rightScore - this.data.difficult * 5
+          rightScore: this.data.rightScore + this.data.difficult * 10
         })
+      } else {
+        if (this.data.rightScore >= this.data.difficult * 5) {
+          this.setData({
+            rightScore: this.data.rightScore - this.data.difficult * 5
+          })
+        }
       }
-    }
-
-
+    }, Math.random() * 1000)
 
     // 切换题目
     this.changeLocalQuestion();
   },
 
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function() {
-
-  }
 })

@@ -9,12 +9,13 @@
 App({
 
   onLaunch: function () {
-
+    
   },
   globalData: {
     userInfo: {
       uid:1,
       userName:"admin",
+      score:0,
     }
   }
 })

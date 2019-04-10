@@ -1,45 +1,53 @@
 <!--index.wxml-->
-<view class="user-info">
-  <!-- 用户名称 -->
-  <open-data class='user-nickname' type="userNickName"></open-data>
-  <!-- 用户头像 -->
-  <open-data class='user-avatar' type="userAvatarUrl"></open-data>
-  <!-- 用户得分 -->
-  <view class='user-score'>得分：{{ score }}</view>
+
+<view wx:if='{{!isAuthorizar}}'>
+  <open-data type="userAvatarUrl"></open-data>
+  <button open-type="getUserInfo" bindgetuserinfo="bindGetWXUserInfo">
+    登录
+  </button>
 </view>
 
+<view wx:else>
+  <view class="user-info">
+    <!-- 用户名称 -->
+    <open-data class='user-nickname' type="userNickName"></open-data>
+    <!-- 用户头像 -->
+    <open-data class='user-avatar' type="userAvatarUrl"></open-data>
+    <!-- 用户得分 -->
+    <view class='user-score'>得分：{{ score }}</view>
+  </view>
 
+  <view class='mod'>
 
+    <view class='con journey' bindtap='gototrophy'>
+      <view class='mod-title1'>排位赛</view>
+      <image class='journey-img' src="../../assets/img/trophy.png"></image>
+    </view>
 
-<view class='mod'>
+    <view class='con leader-board'>
+      <view class='mod-title2'>排行榜</view>
+      <image class='leader-board-img' src="../../assets/img/leaderboard.png"></image>
+    </view>
 
-<view class='con journey' bindtap='gototrophy'>
-  <view class='mod-title1'>排位赛</view>
-  <image class='journey-img' src="../../assets/img/trophy.png"></image>
-</view>
-
-<view class='con leader-board'>
-  <view class='mod-title2'>排行榜</view>
-    <image class='leader-board-img' src="../../assets/img/leaderboard.png"></image>
-</view>
-
-<view class='con store'>
-  <view class='mod-title2'>商店</view>
+    <view class='con store'>
+      <view class='mod-title2'>商店</view>
       <image class='store-img' src="../../assets/img/store.png"></image>
-</view>
+    </view>
 
-<view class='con friendBattle'>
-  <view class='mod-title1'>好友对战</view>
-        <image class='friendBattle-img' src="../../assets/img/friendBattle.png"></image>
-</view>
-<view class='con bank'>
-  <view class='mod-title1'>银行</view>
-  <image class='bank-img' src="../../assets/img/bank.png"></image>
-</view>
+    <view class='con friendBattle'>
+      <view class='mod-title1'>好友对战</view>
+      <image class='friendBattle-img' src="../../assets/img/friendBattle.png"></image>
+    </view>
+    <view class='con bank'>
+      <view class='mod-title1'>银行</view>
+      <image class='bank-img' src="../../assets/img/bank.png"></image>
+    </view>
 
-<view class='con factory'>
-  <view class='mod-title1'>题目工厂</view>
-   <image class='factory-img' src="../../assets/img/factory.png"></image>
-</view>
+    <view class='con factory'>
+      <view class='mod-title1'>题目工厂</view>
+      <image class='factory-img' src="../../assets/img/factory.png"></image>
+    </view>
+
+  </view>
 
 </view>

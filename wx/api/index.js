@@ -1,23 +1,24 @@
 // 从服务器获取分数
-function getUserScore(id) {
+function getServiceUserInfo(userName) {
   return new Promise((resolve, reject) => {
     wx.request({
       method: "GET",
-      url: `https://localhost/api/user/info/${id}`,
+      url: `https://127.0.0.1/account/${userName}`,
       success: function(res) {
-        resolve(res.data.score)
+        resolve(res.data)
       }
     })
   })
 
 }
 
+
 // 从服务器获取题目
 function getQuestions(difficult, limit) {
   return new Promise((resolve, reject) => {
     wx.request({
       method: "GET",
-      url: `https://localhost/api/questions?difficult=${difficult}&limit=${limit}`,
+      url: `https://127.0.0.1/problemset/get?level=${difficult}&limit=${limit}`,
       success: function(res) {
         resolve(res.data)
       }
@@ -30,11 +31,10 @@ function postScore(uid, score) {
   return new Promise(resolve => {
     wx.request({
       method: 'POST',
-      url: 'https://localhost/api/user/submit',
+      url: `https://127.0.0.1/account/${uid}`,
       dataType: 'json',
       data: {
-        'uid': uid,
-        'score': score
+        'modify': score
       },
       success: function(res) {
         resolve(res)
@@ -44,7 +44,7 @@ function postScore(uid, score) {
 }
 
 module.exports = {
-  'getUserScore': getUserScore,
+  'getServiceUserInfo': getServiceUserInfo,
   'getQuestions': getQuestions,
-  'postScore':postScore
+  'postScore': postScore,
 }
