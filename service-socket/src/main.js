@@ -11,7 +11,6 @@ const app = new WebSocket.Server({ host, port });
 // 连接队列
 const queue = new Map();
 let socketNumber = 0;
-let player = null;
 
 // 启动日志
 console.log(`WebSocket 后端启动 ws://${host}:3000`);
@@ -35,14 +34,14 @@ app.on('connection', function connection(ws, request) {
         let received = JSON.parse(message);
         // 2、根据code判断请求
         switch (received["code"]) {
+
             case "100":
                 console.log("%s: 请求联机决斗", IP)
-
                 // 追加到任务队列
                 queue.set(IP, new SocketConnection(IP, ws, received));
                 // 如果存在两个以上联机队列时开始游戏
                 if (queue.size >= 2) {
-                    player = startGame(IP);
+                    startGame(IP);
                 }
                 break;
 
@@ -109,14 +108,15 @@ function startGame(ip) {
             one.socket.send(data);
             two.socket.send(data)
         })
-    return { one, two }
+
 }
 
 // 同步客户端分数
 function SyncClientScore(scoreInfo) {
     let score = JSON.stringify(new SyncScore(scoreInfo.score, scoreInfo.userName, scoreInfo.uid))
-    player.one.socket.send(score);
-    player.two.socket.send(score);
+    app.clients.forEach((client)=>{
+        client.send(score);
+    })
 }
 
 //获取本机ip
