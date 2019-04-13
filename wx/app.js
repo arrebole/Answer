@@ -9,13 +9,13 @@
 App({
 
   onLaunch: function () {
-    
   },
   globalData: {
     userInfo: {
-      uid:1,
-      userName:"admin",
-      score:0,
+      uid: 0,
+      userName: "admin",
+      score: 0,
+      avatarUrl: "",
     }
   }
 })

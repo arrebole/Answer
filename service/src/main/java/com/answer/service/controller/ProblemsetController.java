@@ -35,6 +35,7 @@ public class ProblemsetController {
         String sql = String.format("select * from problemset WHERE BINARY level=%1$s",level);
         List<Map<String,Object>> dataList = jdbcTemplate.queryForList(sql);
 
+
         if(dataList.size()<=limit){
             return dataList;
         }

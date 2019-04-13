@@ -22,12 +22,20 @@ public class AccountController {
     @GetMapping(value = "/{userName}")
     public Map<String,Object> getInfo(@PathVariable("userName") String userName) {
         // 从数据库读取数据
-        String sql = String.format("select * from account WHERE userName = '%1$s'",userName);
-        List<Map<String,Object>> dataList = jdbcTemplate.queryForList(sql);
+        String getSql = String.format("select * from account WHERE userName = '%1$s'",userName);
+        List<Map<String,Object>> dataList = jdbcTemplate.queryForList(getSql);
 
-        //如果不存在则返回错误
-        if(dataList.size() <= 0){
-            return SignalFactory.createSignal("notfound");
+        // 如果不存在账户则新建账户
+        if(dataList.isEmpty()){
+            String setSql = "INSERT INTO account (userName,score) VALUES (?,?)";
+            int r = jdbcTemplate.update(setSql,userName,0);
+            if(r !=1 ){
+                return SignalFactory.createSignal("error");
+            }
+            dataList = jdbcTemplate.queryForList(getSql);
+
+            return dataList.get(0);
+
         }
         return dataList.get(0);
     }

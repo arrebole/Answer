@@ -11,22 +11,28 @@ Page({
     // 难度
     difficult: 0,
     limit: 8,
-    isStart: true,
-    isInGame: false,
+    isStart: false,
+    isInGame:false,
     inFinish: false,
     uid: 0,
+    userName: "",
+
+    // 存放socket
+    socketTask: null,
 
     // 头像路径
-    rightAvatarUrl: '',
+    enemyAvatarUrl: "../../assets/img/someone.jpg",
+    enemyName: "搜索中..",
+    enemyAddress:"",
 
     //分数统计 
     leftScore: 0,
     rightScore: 0,
 
     // 题目
-    local: 0, //回答题目的数量
-    localQuestion: null,
-    questions: null,
+    local: 1, //回答题目的数量
+    localProblem: null,
+    problemset: null,
 
     map: {
       '1': 'a',
@@ -40,73 +46,123 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-    // 获取用户数据
+  onLoad: function (options) {
+
     this.setData({
-      uid: app.globalData.userInfo.uid,
-      difficult: parseInt(options.difficult),
-      rightAvatarUrl: "../../assets/img/someone.jpg",
+      difficult: options.difficult,
+      userName: app.globalData.userInfo.userName,
+      uid:app.globalData.userInfo.uid,
+
+    })
+    // 进行socket连接
+    this.createSocket();
+
+  },
+
+  onShow: function () {
+
+  },
+  onUnload: function () {
+    this.data.socketTask.close();
+  },
+  // 连接socket
+  createSocket: function () {
+    // 连接socket
+    //this.socketTask = 
+    let socket = wx.connectSocket({
+      url: `ws://${api.host}:3000`,
+      header: {
+        'content-type': 'application/json'
+      },
+      protocols: ['protocol1']
+    })
+    //建立socket成功
+    wx.onSocketOpen(() => {
+      console.log('websocket连接成功!');
+      this.setData({
+        socketTask: socket,
+      })
+      //发送用户信息，等待对战
+      this.socketSendUserInfo()
 
     })
 
-    // 获取题目数据
-    api.getQuestions(this.data.difficult, this.data.limit).then((data) => {
-      console.log(data)
-      // 储存题库
-      this.setData({
-        questions: data,
-        limit: data.length,
-      })
-      // 取出第一题
-      this.changeLocalQuestion()
+    //连接失败
+    wx.onSocketError(() => {
+      console.log('websocket连接失败！');
     })
-    // show页面
-    setTimeout(() => {
-      this.setData({
-        isStart: false,
-        isInGame: true,
 
-      })
-    }, 1000)
+    // 接受到服务端的信息
+    wx.onSocketMessage((res) => {
 
-  },
-  // 切换题目
-  changeLocalQuestion: function() {
-    // 超出题目数量则退出并提交成绩
-    if (this.data.local >= this.data.limit) {
-      this.setData({
-        isInGame: false,
-        inFinish: true,
-      })
-      this.settlement(this.data.uid, this.data.leftScore)
+      console.log("接受到服务器的消息事件", res.data);
+      let obj = JSON.parse(res.data);
+      switch (obj.code) {
+        // 0表示关闭
+        case "0":
+          wx.close();
+          wx.reLanch({
+            url: 'page/index/index'
+          })
+          break;
 
-      setTimeout(() => {
-        wx.navigateBack({
-          delta: 2
-        })
-      }, 2000)
-      return
-    }
-    this.setData({
-      localQuestion: this.data.questions[this.data.local],
-      local: this.data.local + 1
+        // 200 表示匹配用户信息
+        case "200":
+        console.log("成功匹配到",obj);
+          this.setData({
+            enemyAvatarUrl: obj.avatarUrl,
+            enemyName: obj.userName,
+            enemyAddress:obj.address,
+          })
+          break;
+        // 300 表示发送题目
+        case "300":
+          this.setData({
+            problemset: obj.problemset,
+            localProblem: obj.problemset[0],
+            isStart: true,
+            isInGame:true,
+            limit: obj.problemset.length,
+          })
+          break;
+
+        // 400 表示同步分数
+        case "400":
+          if (obj.userName == this.data.enemyName){
+            console.log("成功更新对方数据")
+            this.setData({
+              rightScore: obj.score,
+            })
+          }
+
+      }
+
+    })
+    // socket连接关闭
+    wx.onSocketClose(() => {
+      console.log("WebSocket 断开连接")
     })
   },
 
-
-  // 结算
-  settlement(uid, score) {
-    api.postScore(uid, score).then(() => {});
+  // 发送用户信息
+  socketSendUserInfo: function () {
+    wx.sendSocketMessage({
+      data: JSON.stringify({
+        "message": "await start game",
+        "code": "100",
+        "level": `${this.data.difficult}`,
+        "uid": `${app.globalData.userInfo.uid}`,
+        "userName": `${app.globalData.userInfo.userName}`,
+        "avatarUrl": `${app.globalData.userInfo.avatarUrl}`,
+      }),
+      success: () => { }
+    })
   },
 
-
-  // 回答问题
-  reply: function(event) {
-
-    // 我方回答
-    var q = event.currentTarget.dataset.answer
-
-    if (q == this.data.map[this.data.localQuestion.solution]) {
+  //回答问题
+  reply(event) {
+    let rep = event.currentTarget.dataset.answer;
+    if (rep == this.data.map[this.data.localProblem.solution]) {
       this.setData({
         leftScore: this.data.leftScore + this.data.difficult * 10
       })
@@ -118,27 +174,41 @@ Page({
           leftScore: this.data.leftScore - this.data.difficult * 5
         })
       }
-
     }
-
-    setTimeout(() => {
-      // 敌方回答
-      var rand = Math.round(Math.random() * 10);
-      if (rand >= 5) {
-        this.setData({
-          rightScore: this.data.rightScore + this.data.difficult * 10
-        })
-      } else {
-        if (this.data.rightScore >= this.data.difficult * 5) {
-          this.setData({
-            rightScore: this.data.rightScore - this.data.difficult * 5
-          })
-        }
-      }
-    }, Math.random() * 1000)
-
+    // 发送本次分数结果
+    this.data.socketTask.send({
+      data:JSON.stringify({
+        code: "400",
+        uid: this.data.uid,
+        userName:this.data.userName,
+        // address: this.data.enemyAddress,
+        score:this.data.leftScore,
+      })
+    })
     // 切换题目
-    this.changeLocalQuestion();
+    this.changeLocalProblem();
+  },
+
+  changeLocalProblem() {
+    // 超出题目数量则退出并提交成绩
+    if (this.data.local >= this.data.limit) {
+      this.setData({
+        isInGame: false,
+        inFinish:true,
+      })
+      api.postScore(app.globalData.userInfo.uid, this.data.leftScore).then(() => {});
+
+      setTimeout(() => {
+        wx.navigateBack({
+          delta: 2
+        })
+      }, 2000)
+      return
+    }
+    this.setData({
+      localProblem: this.data.problemset[this.data.local],
+      local: this.data.local + 1
+    })
   },
 
 })

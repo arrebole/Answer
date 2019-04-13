@@ -5,41 +5,41 @@
 
   <view class='answer-user'>
     <open-data class='answer-avatar'  type="userAvatarUrl"></open-data>
-    <view class='answer-user-score'>得分:{{ leftScore }}</view>
+    <view class='answer-user-score'> {{ userName }} 得分:{{ leftScore }}</view>
   </view>
 
   <view class='vs'> VS </view>
 
   <view class='answer-user'>
-    <image class='answer-avatar' src='{{ rightAvatarUrl }}'></image>
-    <view class='answer-user-score'>得分:{{ rightScore }}</view>
+    <image class='answer-avatar' src='{{ enemyAvatarUrl }}'></image>
+    <view class='answer-user-score'>{{ enemyName }} 得分:{{ rightScore }}</view>
   </view>
 
 </view>
 
-<view wx-if="{{ isStart }}" class='isStart'>
-  <button type="warn" loading="true">加载中</button>
+<view wx-if="{{ !isStart }}" class='isStart'>
+  <button type="warn" loading="true">匹配中</button>
 </view>
 
 <view wx-if="{{ isInGame }}">
-  <view class='answer-question'>
-    <view class='question-topic'>{{ localQuestion.topic }}</view>
+  <view class='answer-problem'>
+    <view class='problem-topic'>{{ localProblem.topic }}</view>
   </view>
 
-  <button class="question-select-default" data-answer='a' type="primary" bindtap="reply">
-    {{ localQuestion.optionA }}
+  <button class="problem-select-default" data-answer='a' type="primary" bindtap="reply">
+    {{ localProblem.optionA }}
   </button>
 
-  <button class="question-select-default" data-answer='b' type="primary" bindtap="reply">
-    {{ localQuestion.optionB }}
+  <button class="problem-select-default" data-answer='b' type="primary" bindtap="reply">
+    {{ localProblem.optionB }}
   </button>
 
-  <button class="question-select-default" data-answer='c' type="primary" bindtap="reply">
-    {{ localQuestion.optionC }}
+  <button class="problem-select-default" data-answer='c' type="primary" bindtap="reply">
+    {{ localProblem.optionC }}
   </button>
 
-  <button class="question-select-default" data-answer='d' type="primary" bindtap="reply">
-    {{ localQuestion.optionD }}
+  <button class="problem-select-default" data-answer='d' type="primary" bindtap="reply">
+    {{ localProblem.optionD }}
   </button>
 
 </view>
