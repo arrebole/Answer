@@ -12,10 +12,11 @@ App({
   },
   globalData: {
     userInfo: {
-      uid: 0,
+      uid: "-1",
       userName: "admin",
       score: 0,
       avatarUrl: "",
+      isAuthorizar:false,
     }
   }
 })

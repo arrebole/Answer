@@ -30,7 +30,7 @@
     </view>
 
     <view class='con store'>
-      <view class='mod-title2'>商店</view>
+      <view class='mod-title2'>签到</view>
       <image class='store-img' src="../../assets/img/store.png"></image>
     </view>
 
@@ -38,14 +38,15 @@
       <view class='mod-title1'>题目工厂</view>
       <image class='friendBattle-img' src="../../assets/img/factory.png"></image>
     </view>
+
     <view class='con bank'>
-      <view class='mod-title1'>银行</view>
-      <image class='bank-img' src="../../assets/img/bank.png"></image>
+      <view class='mod-title1'>历史记录</view>
+      <image class='bank-img' src="../../assets/img/history.png"></image>
     </view>
 
     <view class='con factory'>
-      <view class='mod-title1'>好友对战</view>
-      <image class='factory-img' src="../../assets/img/friendBattle.png"></image>
+      <view class='mod-title1'>敬请期待..</view>
+      <image class='factory-img' src="../../assets/img/expect.png"></image>
     </view>
 
   </view>
