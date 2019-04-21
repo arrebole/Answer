@@ -6,7 +6,6 @@ class SocketConnection {
         this.ip = ip;
         this.socket = socket;
         this.userInfo = userInfo;
-        this.level = userInfo.level;
         this.isStartGame = false;
     }
 
@@ -29,7 +28,6 @@ class Identification{
     constructor(conn){
         this.code = "200";
         this.uid = conn.userInfo.uid;
-        this.level = conn.level;
         this.address = conn.ip;
         this.userName = conn.userInfo.userName;
         this.avatarUrl = conn.userInfo.avatarUrl;

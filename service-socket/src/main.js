@@ -1,10 +1,10 @@
-
+﻿
 const WebSocket = require('ws');
 const https = require("https");
 const axios = require("axios");
 const { SocketConnection, Identification, Problemset, SyncScore } = require("./utils");
 
-const host = getIPAdress();
+const host = "127.0.0.1";
 const port = 3000;
 const app = new WebSocket.Server({ host, port });
 
@@ -74,7 +74,6 @@ function startGame(ip) {
     console.log("++++++++游戏开始+++++++++")
     let one = queue.get(ip);
     let two = null;
-    let level = one.level;
 
     //随机匹配一个对手
     let i = null
@@ -101,7 +100,7 @@ function startGame(ip) {
 
     // 发送题目
     // 1、向http服务器 请求题目
-    axios.get(`https://127.0.0.1/problemset/get?limit=8&&level=${level}`, { httpsAgent: agent })
+    axios.get(`https://127.0.0.1/api/problemset/get?limit=8`, { httpsAgent: agent })
         .then((response) => {
             let data = JSON.stringify(new Problemset(response.data));
             //发送给客户端

@@ -17,13 +17,25 @@ Page({
   },
 
   // 跳转排行榜
-  gototrophy: function() {
+  gotoAnswer: function() {
     wx.navigateTo({
-      url: '../trophy/trophy'
+      url: '../answer/answer'
     })
 
   },
+  //gotoLeaderboard
+  gotoLeaderBoard: function () {
+    wx.navigateTo({
+      url: '../leaderboard/leaderboard'
+    })
 
+  },
+  // 跳到题目工厂
+  gotoFactory:function(){
+    wx.navigateTo({
+      url: '../factory/factory'
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -31,7 +43,7 @@ Page({
   },
 
   onShow:function(){
-    if (app.globalData.userInfo.uid != 0) {
+    if (app.globalData.userInfo.uid != '0') {
       this.getServiceUserInfo(app.globalData.userInfo.userName);
     }
   },
@@ -51,16 +63,26 @@ Page({
     
     let getinfo = api.getServiceUserInfo(userName);
     getinfo.then((res)=>{
-      
-      app.globalData.userInfo.score = res.score;
+      console.log("获取后端用户信息成功为",res);
+
+      // 设置全局数据
+      app.globalData.userInfo.score = parseInt(res.score);
       app.globalData.userInfo.uid = res.uid;
       app.userName = res.userName;
+
+      // 更新后端数据(头像)
+      api.updateServiceUserInfo(
+        app.globalData.userInfo.userName,{
+        "avatarURL": app.globalData.userInfo.avatarUrl
+      }).then((res)=>{console.log("更新后端用户信息成功为",res)})
+
+      // 从app全局数据同步本页数据
       this.refreshData();
     })
     
   },
 
-  // 同步页面数据
+  // 从全局数据同步本页数据
   refreshData(){
     this.setData({
       uid:app.globalData.userInfo.uid,

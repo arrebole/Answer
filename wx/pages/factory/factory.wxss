@@ -1,0 +1,12 @@
+/* pages/factory/factory.wxss */
+page{
+  background-color: #ebebeb;
+}
+
+.factory-section{
+  margin: 30rpx auto;
+  padding: 20rpx;
+  color: rgb(151, 151, 151);
+  background-color: #fff;
+  text-indent: 1em;
+}

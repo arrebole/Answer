@@ -8,8 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    // 难度
-    difficult: 0,
+    //题目数量
     limit: 8,
     isStart: false,
     isInGame:false,
@@ -34,22 +33,14 @@ Page({
     localProblem: null,
     problemset: null,
 
-    map: {
-      '1': 'a',
-      '2': 'b',
-      '3': 'c',
-      '4': 'd',
-    }
-
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function () {
 
     this.setData({
-      difficult: options.difficult,
       userName: app.globalData.userInfo.userName,
       uid:app.globalData.userInfo.uid,
 
@@ -150,7 +141,6 @@ Page({
       data: JSON.stringify({
         "message": "await start game",
         "code": "100",
-        "level": `${this.data.difficult}`,
         "uid": `${app.globalData.userInfo.uid}`,
         "userName": `${app.globalData.userInfo.userName}`,
         "avatarUrl": `${app.globalData.userInfo.avatarUrl}`,
@@ -162,16 +152,16 @@ Page({
   //回答问题
   reply(event) {
     let rep = event.currentTarget.dataset.answer;
-    if (rep == this.data.map[this.data.localProblem.solution]) {
+    if (rep == this.data.localProblem.solution) {
       this.setData({
-        leftScore: this.data.leftScore + this.data.difficult * 10
+        leftScore: this.data.leftScore + 10
       })
     } else {
 
       // 选错扣分，最少0分
-      if (this.data.leftScore >= this.data.difficult * 5) {
+      if (this.data.leftScore >=  5) {
         this.setData({
-          leftScore: this.data.leftScore - this.data.difficult * 5
+          leftScore: this.data.leftScore -  5
         })
       }
     }
@@ -196,11 +186,15 @@ Page({
         isInGame: false,
         inFinish:true,
       })
-      api.postScore(app.globalData.userInfo.uid, this.data.leftScore).then(() => {});
+
+      // 提交分数
+      api.updateServiceUserInfo(app.globalData.userInfo.userName,{
+        score: (this.data.leftScore + app.globalData.userInfo.score).toString()
+      });
 
       setTimeout(() => {
         wx.navigateBack({
-          delta: 2
+          delta: this.data.leftScore + app.globalData.userInfo.score
         })
       }, 2000)
       return

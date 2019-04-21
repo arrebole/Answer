@@ -1,13 +1,14 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/trophy/trophy",
-    "pages/answer/answer"
+    "pages/answer/answer",
+    "pages/leaderboard/leaderboard",
+    "pages/factory/factory"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "IQ冒险",
+    "navigationBarTitleText": "答题王者",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json"

@@ -19,12 +19,12 @@
 
   <view class='mod'>
 
-    <view class='con journey' bindtap='gototrophy'>
+    <view class='con journey' bindtap='gotoAnswer'>
       <view class='mod-title1'>排位赛</view>
       <image class='journey-img' src="../../assets/img/trophy.png"></image>
     </view>
 
-    <view class='con leader-board'>
+    <view class='con leader-board' bindtap='gotoLeaderBoard'>
       <view class='mod-title2'>排行榜</view>
       <image class='leader-board-img' src="../../assets/img/leaderboard.png"></image>
     </view>
@@ -34,9 +34,9 @@
       <image class='store-img' src="../../assets/img/store.png"></image>
     </view>
 
-    <view class='con friendBattle'>
-      <view class='mod-title1'>好友对战</view>
-      <image class='friendBattle-img' src="../../assets/img/friendBattle.png"></image>
+    <view class='con friendBattle' bindtap='gotoFactory'>
+      <view class='mod-title1'>题目工厂</view>
+      <image class='friendBattle-img' src="../../assets/img/factory.png"></image>
     </view>
     <view class='con bank'>
       <view class='mod-title1'>银行</view>
@@ -44,8 +44,8 @@
     </view>
 
     <view class='con factory'>
-      <view class='mod-title1'>题目工厂</view>
-      <image class='factory-img' src="../../assets/img/factory.png"></image>
+      <view class='mod-title1'>好友对战</view>
+      <image class='factory-img' src="../../assets/img/friendBattle.png"></image>
     </view>
 
   </view>

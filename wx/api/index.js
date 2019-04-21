@@ -1,13 +1,13 @@
 
-const host = "192.168.1.112";
+const host = "127.0.0.1";
 
 // 从服务器获取分数
 function getServiceUserInfo(userName) {
   return new Promise((resolve, reject) => {
     wx.request({
       method: "GET",
-      url: `https://${host}/account/${userName}`,
-      success: function(res) {
+      url: `https://${host}/api/account/${userName}`,
+      success: function (res) {
         resolve(res.data)
       }
     })
@@ -17,12 +17,12 @@ function getServiceUserInfo(userName) {
 
 
 // 从服务器获取题目
-function getQuestions(difficult, limit) {
+function getQuestions(limit) {
   return new Promise((resolve, reject) => {
     wx.request({
       method: "GET",
-      url: `https://${host}/problemset/get?level=${difficult}&limit=${limit}`,
-      success: function(res) {
+      url: `https://${host}/api/problemset/get?limit=${limit}`,
+      success: function (res) {
         resolve(res.data)
       }
     })
@@ -30,17 +30,43 @@ function getQuestions(difficult, limit) {
 }
 
 // 提交成绩
-function postScore(uid, score) {
+function updateServiceUserInfo(uid, data) {
   return new Promise(resolve => {
     wx.request({
       method: 'POST',
-      url: `https://${host}/account/${uid}`,
+      url: `https://${host}/api/account/${uid}`,
       dataType: 'json',
-      data: {
-        'modify': score
-      },
-      success: function(res) {
-        resolve(res)
+      data: JSON.stringify(data),
+      success: function (res) {
+        resolve(res.data)
+      }
+    })
+  })
+}
+
+// 查看排行榜
+function getRanking() {
+  return new Promise(resolve => {
+    wx.request({
+      method: 'GET',
+      url: `https://${host}/api/ranking`,
+      dataType: 'json',
+      success: function (res) {
+        resolve(res.data)
+      }
+    })
+  })
+}
+
+function addProblemset(data){
+  return new Promise(resolve => {
+    wx.request({
+      method: 'POST',
+      url: `https://${host}/api/problemset/add`,
+      dataType: 'json',
+      data:JSON.stringify(data),
+      success: function (res) {
+        resolve(res.data)
       }
     })
   })
@@ -48,7 +74,9 @@ function postScore(uid, score) {
 
 module.exports = {
   'getServiceUserInfo': getServiceUserInfo,
+  'updateServiceUserInfo': updateServiceUserInfo,
   'getQuestions': getQuestions,
-  'postScore': postScore,
-  'host':host,
+  "getRanking": getRanking,
+  'host': host,
+  'addProblemset':addProblemset
 }

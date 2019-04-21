@@ -1,0 +1,14 @@
+<!--pages/leaderboard.wxml-->
+
+<view class="leaderBoard-main">
+  
+  <view class='leaderBoard-module' wx:for="{{list}}" wx:if="{{ !isLoading}}" wx:key="{{index}}">
+
+   <view class="leaderBoard-ranking">{{ index }}</view> 
+    <image class="leaderBoard-avatar" src= "{{ item.avatarURL }}"></image>
+    <view class="leaderBoard-userName"> {{ item.userName }} </view>
+    <view class="leaderBoard-score"> {{ item.score }}</view>
+  
+  </view>
+  
+</view>

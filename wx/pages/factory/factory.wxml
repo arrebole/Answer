@@ -1,0 +1,29 @@
+<!--pages/factory/factory.wxml-->
+
+<view class="factory-section">
+  <input placeholder="题目: topic?" data-type='topic' bindblur="bindKeyInput" />
+</view>
+
+<view class="factory-section">
+  <input maxlength="1" data-type='solution' bindinput="bindKeyInput" placeholder="答案: a | b | c | d"/>
+</view>
+
+<view class="factory-section">
+  <input data-type='optionA' bindinput="bindKeyInput" placeholder="选项A"/>
+</view>
+
+<view class="factory-section">
+  <input data-type='optionB' bindinput="bindKeyInput" placeholder="选项B"/>
+</view>
+
+<view class="factory-section">
+  <input data-type='optionC' bindinput="bindKeyInput" placeholder="选项C"/>
+</view>
+
+<view class="factory-section">
+  <input  data-type='optionD' bindinput="bindKeyInput" placeholder="选项D"/>
+</view>
+
+  <view class="btn-area">
+    <button bindtap="bindSubmit">提交</button>
+  </view>
