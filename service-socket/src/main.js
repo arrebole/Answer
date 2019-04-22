@@ -4,7 +4,7 @@ const https = require("https");
 const axios = require("axios");
 const { SocketConnection, Identification, Problemset, SyncScore } = require("./utils");
 
-const host = "127.0.0.1";
+const host = "0.0.0.0";
 const port = 3000;
 const app = new WebSocket.Server({ host, port });
 

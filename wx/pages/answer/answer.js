@@ -8,10 +8,11 @@ Page({
    * 页面的初始数据
    */
   data: {
+    timer: 5,
     //题目数量
     limit: 8,
     isStart: false,
-    isInGame:false,
+    isInGame: false,
     inFinish: false,
     uid: 0,
     userName: "",
@@ -22,7 +23,7 @@ Page({
     // 头像路径
     enemyAvatarUrl: "../../assets/img/someone.jpg",
     enemyName: "搜索中..",
-    enemyAddress:"",
+    enemyAddress: "",
 
     //分数统计 
     leftScore: 0,
@@ -42,7 +43,7 @@ Page({
 
     this.setData({
       userName: app.globalData.userInfo.userName,
-      uid:app.globalData.userInfo.uid,
+      uid: app.globalData.userInfo.uid,
 
     })
     // 进行socket连接
@@ -56,6 +57,24 @@ Page({
   onUnload: function () {
     this.data.socketTask.close();
   },
+  // 减少时间
+  reduceTime() {
+    setTimeout(() => {
+      if (this.data.timer > 0) {
+        this.setData({
+          timer: this.data.timer - 1
+        })
+        this.reduceTime()
+      } else {
+        this.setData({
+          timer: 6
+        })
+        this.changeLocalProblem()
+      }
+
+    }, 1000)
+  },
+
   // 连接socket
   createSocket: function () {
     // 连接socket
@@ -99,11 +118,11 @@ Page({
 
         // 200 表示匹配用户信息
         case "200":
-        console.log("成功匹配到",obj);
+          console.log("成功匹配到", obj);
           this.setData({
             enemyAvatarUrl: obj.avatarUrl,
             enemyName: obj.userName,
-            enemyAddress:obj.address,
+            enemyAddress: obj.address,
           })
           break;
         // 300 表示发送题目
@@ -112,14 +131,15 @@ Page({
             problemset: obj.problemset,
             localProblem: obj.problemset[0],
             isStart: true,
-            isInGame:true,
+            isInGame: true,
             limit: obj.problemset.length,
           })
+          this.reduceTime()
           break;
 
         // 400 表示同步分数
         case "400":
-          if (obj.userName == this.data.enemyName){
+          if (obj.userName == this.data.enemyName) {
             console.log("成功更新对方数据")
             this.setData({
               rightScore: obj.score,
@@ -154,25 +174,25 @@ Page({
     let rep = event.currentTarget.dataset.answer;
     if (rep == this.data.localProblem.solution) {
       this.setData({
-        leftScore: this.data.leftScore + 10
+        leftScore: this.data.leftScore + 10 + this.data.timer
       })
     } else {
 
       // 选错扣分，最少0分
-      if (this.data.leftScore >=  5) {
+      if (this.data.leftScore >= 5) {
         this.setData({
-          leftScore: this.data.leftScore -  5
+          leftScore: this.data.leftScore - 5
         })
       }
     }
     // 发送本次分数结果
     this.data.socketTask.send({
-      data:JSON.stringify({
+      data: JSON.stringify({
         code: "400",
         uid: this.data.uid,
-        userName:this.data.userName,
+        userName: this.data.userName,
         // address: this.data.enemyAddress,
-        score:this.data.leftScore,
+        score: this.data.leftScore,
       })
     })
     // 切换题目
@@ -184,11 +204,11 @@ Page({
     if (this.data.local >= this.data.limit) {
       this.setData({
         isInGame: false,
-        inFinish:true,
+        inFinish: true,
       })
 
       // 提交分数
-      api.updateServiceUserInfo(app.globalData.userInfo.userName,{
+      api.updateServiceUserInfo(app.globalData.userInfo.userName, {
         score: (this.data.leftScore + app.globalData.userInfo.score).toString()
       });
 
@@ -203,6 +223,7 @@ Page({
       localProblem: this.data.problemset[this.data.local],
       local: this.data.local + 1
     })
+    this.reduceTime()
   },
 
 })

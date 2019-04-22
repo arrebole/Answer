@@ -15,6 +15,13 @@ Page({
     optionD: "",
   },
   bindSubmit: function () {
+    let keys = Object.keys(this.data);
+
+    for (let item of keys) {
+      let txt = this.data[item];
+      if (txt.trim().length == 0) return;
+    }
+
     api.addProblemset({
       topic: this.data.topic,
       solution: this.data.solution,

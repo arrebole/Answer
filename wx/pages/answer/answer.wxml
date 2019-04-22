@@ -10,6 +10,9 @@
 
   <view class='vs'> VS </view>
 
+
+
+
   <view class='answer-user'>
     <image class='answer-avatar' src='{{ enemyAvatarUrl }}'></image>
     <view class='answer-user-score'>{{ enemyName }} 得分:{{ rightScore }}</view>
@@ -22,6 +25,13 @@
 </view>
 
 <view wx-if="{{ isInGame }}">
+
+    <!-- 计时器 -->
+  <view class='timer'>
+    {{ timer }}
+  </view>
+
+
   <view class='answer-problem'>
     <view class='problem-topic'>{{ localProblem.topic }}</view>
   </view>
