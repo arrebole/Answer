@@ -1,11 +1,14 @@
 const Router = require('koa-router');
-const { db2, db0 } = require("../db");
+const RedisClients = require("../db");
 const router = new Router();
+
+const rankingDB = RedisClients.getTable(2);
+const accountDB = RedisClients.getTable(0);
 
 
 // 读取前20用户
 function QueyUserBySore(limit) {
-    return db2.zrevrange("ranking", 0, limit)
+    return  rankingDB.zrevrange("ranking", 0, limit)
 }
 
 // 通过用户生成sql语句
@@ -31,7 +34,7 @@ function organizeData(list) {
 router.get("/", async (ctx, next) => {
     let rangking = await QueyUserBySore(20);
     let sql = createSqlString(rangking)
-    let rangkingUserData = await db0.pipeline(sql).exec();
+    let rangkingUserData = await accountDB.pipeline(sql).exec();
     ctx.body =  JSON.stringify(organizeData(rangkingUserData))
 })
 

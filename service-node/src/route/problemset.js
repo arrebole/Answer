@@ -1,21 +1,21 @@
 const Router = require('koa-router');
-const message = require("../utils/message");
-const { db1 } = require("../db");
+const Sign = require("../sign");
+const RedisClient = require("../db");
 const router = new Router();
 
 
 // redis客户端
-const redis = db1;
+const problemsetDB = RedisClient.getTable(1);
 
 // 获取数据库中一共有多少题目 返回 number类型
 async function queryProblemsetSize() {
-    let dbsize = await redis.dbsize();
+    let dbsize = await problemsetDB.dbsize();
     return dbsize;
 }
 
 // 获取数据库中所有题目的id 返回 Array类型
 async function queryProblemsetKeys() {
-    let keys = await redis.keys("*")
+    let keys = await problemsetDB.keys("*")
     return keys;
 }
 
@@ -41,7 +41,7 @@ async function QueryProblemset(limit) {
     for (let i of querykeys) {
         sql.push(['hgetall', i])
     }
-    return redis.pipeline(sql).exec();
+    return problemsetDB.pipeline(sql).exec();
 }
 
 // 往数据库中添加题目
@@ -56,9 +56,7 @@ async function addSQLProblemset(probmemset) {
     for (let k of keys) {
         sql.push(['hset', id, k, probmemset[k]])
     }
-
-    console.log(sql)
-    return redis.pipeline(sql).exec()
+    return problemsetDB.pipeline(sql).exec()
 }
 
 // problemset分路由
@@ -84,7 +82,7 @@ router.get('/get', async (ctx, next) => {
 router.post("/add", async (ctx, next) => {
     let newProblemset = ctx.request.body
     await addSQLProblemset(newProblemset);
-    ctx.body = message.success;
+    ctx.body = Sign.success;
 })
 
 
