@@ -16,9 +16,8 @@ Page({
   },
   bindSubmit: function () {
     let keys = Object.keys(this.data);
-
-    for (let item of keys) {
-      let txt = this.data[item];
+    for (let i = 0;i<6;i++) {
+      let txt = this.data[keys[i]];
       if (txt.trim().length == 0) return;
     }
 
