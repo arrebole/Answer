@@ -1,5 +1,5 @@
 
-const host = "gkdark.xyz";
+const host = "127.0.0.1";
 
 // 从服务器获取分数
 function getServiceUserInfo(userName) {
