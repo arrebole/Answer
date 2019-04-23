@@ -1,0 +1,12 @@
+<!--pages/history.wxml-->
+
+<view class="history-main">
+  
+  <view class='history-module' wx:for="{{history}}" wx:if="{{ !isLoading }}" wx:key="{{index}}">
+
+   <view class="history-time">{{ item.time }}</view> 
+  <view class="history-score"> + {{ item.score }}</view>
+  
+  </view>
+  
+</view>

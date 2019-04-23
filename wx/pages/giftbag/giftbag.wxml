@@ -1,0 +1,8 @@
+<!--pages/giftbag/giftbag.wxml-->
+<view class="giftbag-section">
+  <input bindinput="bindKeyInput" placeholder="输入兑换码"/>
+</view>
+
+  <view class="btn-area">
+    <button bindtap="bindSubmit">提交</button>
+  </view>

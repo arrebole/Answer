@@ -36,6 +36,18 @@ Page({
       url: '../factory/factory'
     })
   },
+
+  gotoGiftbag: function () {
+    wx.navigateTo({
+      url: '../giftbag/giftbag'
+    })
+  },
+
+  gotoHistory:function(){
+    wx.navigateTo({
+      url: '../history/history'
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

@@ -6,6 +6,7 @@ const router = new Router();
 
 // redis客户端
 const problemsetDB = RedisClient.getTable(1);
+const auditProblemsetDB = RedisClient.getTable(4);
 
 // 获取数据库中一共有多少题目 返回 number类型
 async function queryProblemsetSize() {
@@ -44,8 +45,8 @@ async function QueryProblemset(limit) {
     return problemsetDB.pipeline(sql).exec();
 }
 
-// 往数据库中添加题目
-async function addSQLProblemset(probmemset) {
+// 往审核数据库中添加题目
+async function addSQLProblemset(probmemset, db) {
     // 生成问题 id ，id为已有题目数量+1
     let dbsize = await queryProblemsetSize()
     let id = (dbsize).toString();
@@ -56,7 +57,7 @@ async function addSQLProblemset(probmemset) {
     for (let k of keys) {
         sql.push(['hset', id, k, probmemset[k]])
     }
-    return problemsetDB.pipeline(sql).exec()
+    return db.pipeline(sql).exec()
 }
 
 // problemset分路由
@@ -81,9 +82,35 @@ router.get('/get', async (ctx, next) => {
 // 添加题目
 router.post("/add", async (ctx, next) => {
     let newProblemset = ctx.request.body
-    await addSQLProblemset(newProblemset);
+    await addSQLProblemset(newProblemset, auditProblemsetDB);
     ctx.body = Sign.success;
 })
 
+// 获取需要审核的列表
+router.get("/audit", async (ctx, next) => {
+    let allkey = await auditProblemsetDB.keys("*");
+    let sql = []
+    for (let key of allkey) {
+        sql.push(["hgetall", key])
+    }
+    let list = await auditProblemsetDB.pipeline(sql).exec();
+    let newList = []
+    for (let item of list) {
+        newList.push(item[1])
+    }
+    ctx.body = JSON.stringify(newList)
+})
+// 提交审核成功
+router.get("/audit/:id", async (ctx, next) => {
+    let id = ctx.params["id"];
+    let sig = await auditProblemsetDB.exists(id);
+    if (sig == 0) {
+        ctx.body = Sign.error;
+        return;
+    }
+
+    await auditProblemsetDB.move(id, 1);
+    ctx.body = Sign.success;
+})
 
 module.exports = router;

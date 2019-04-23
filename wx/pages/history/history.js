@@ -1,49 +1,20 @@
-// pages/factory/factory.js
+// pages/history.js
 const api = require("../../api/index.js");
-
+const app = getApp()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    topic: "",
-    solution: "",
-    optionA: "",
-    optionB: "",
-    optionC: "",
-    optionD: "",
+    history: [],
+    isLoading: true
   },
-  bindSubmit: function () {
-    let keys = Object.keys(this.data);
-    for (let i = 0;i<6;i++) {
-      let txt = this.data[keys[i]];
-      if (txt.trim().length == 0) return;
-    }
 
-    api.addProblemset({
-      topic: this.data.topic,
-      solution: this.data.solution,
-      optionA: this.data.optionA,
-      optionB: this.data.optionB,
-      optionC: this.data.optionC,
-      optionD: this.data.optionD
-    }).then(() => {
-      wx.navigateBack({
-        delta: 2
-      })
-    })
-  },
-  bindKeyInput: function (e) {
-    let t = e.currentTarget.dataset.type
-    this.setData({
-      [t]: e.detail.value
-    })
-  },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function () {
+  onLoad: function (options) {
 
   },
 
@@ -58,7 +29,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    api.getHistory(app.globalData.userInfo.userName).then((res) => {
 
+      let list = [];
+      for (let index in res) {
+        list.unshift({
+          time: index,
+          score: res[index]
+        })
+      }
+      console.log("获取历史记录", list)
+      this.setData({
+        history: list,
+        isLoading: false,
+      })
+    })
   },
 
   /**

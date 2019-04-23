@@ -3,7 +3,9 @@
     "pages/index/index",
     "pages/answer/answer",
     "pages/leaderboard/leaderboard",
-    "pages/factory/factory"
+    "pages/factory/factory",
+    "pages/history/history",
+    "pages/giftbag/giftbag"
   ],
   "window": {
     "backgroundTextStyle": "light",

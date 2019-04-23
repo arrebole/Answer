@@ -1,0 +1,9 @@
+/* pages/giftbag/giftbag.wxss */
+page{
+    background-color: #ebebeb;
+  }
+.giftbag-section{
+    margin: 30rpx auto;
+    padding: 20rpx 0;
+    background-color: #fff;
+}

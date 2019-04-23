@@ -2,7 +2,7 @@
 
 <view class="leaderBoard-main">
   
-  <view class='leaderBoard-module' wx:for="{{list}}" wx:if="{{ !isLoading}}" wx:key="{{index}}">
+  <view class='leaderBoard-module' wx:for="{{list}}" wx:if="{{!isLoading}}" wx:key="{{index}}">
 
    <view class="leaderBoard-ranking">{{ index }}</view> 
     <image class="leaderBoard-avatar" src= "{{ item.avatarURL }}"></image>

@@ -72,11 +72,40 @@ function addProblemset(data){
   })
 }
 
+function getGiftBag(data){
+  return new Promise(resolve => {
+    wx.request({
+      method: 'POST',
+      url: `https://${host}/api/giftbag`,
+      dataType: 'json',
+      data:JSON.stringify(data),
+      success: function (res) {
+        resolve(res.data)
+      }
+    })
+  })
+}
+
+function getHistory(userName) {
+  return new Promise(resolve => {
+    wx.request({
+      method: 'GET',
+      url: `https://${host}/api/history/${userName}`,
+      dataType: 'json',
+      success: function (res) {
+        resolve(res.data)
+      }
+    })
+  })
+}
+
 module.exports = {
   'getServiceUserInfo': getServiceUserInfo,
   'updateServiceUserInfo': updateServiceUserInfo,
   'getQuestions': getQuestions,
   "getRanking": getRanking,
   'host': host,
-  'addProblemset':addProblemset
+  'addProblemset':addProblemset,
+  'getGiftBag':getGiftBag,
+  'getHistory': getHistory
 }

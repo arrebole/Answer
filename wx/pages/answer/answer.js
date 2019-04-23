@@ -50,10 +50,7 @@ Page({
     this.createSocket();
 
   },
-
-  onShow: function () {
-
-  },
+  // 关闭页面时关闭socket
   onUnload: function () {
     this.data.socketTask.close();
   },
@@ -198,7 +195,7 @@ Page({
     // 切换题目
     this.changeLocalProblem();
   },
-
+  // 切换题目
   changeLocalProblem() {
     // 超出题目数量则退出并提交成绩
     if (this.data.local >= this.data.limit) {
@@ -214,7 +211,7 @@ Page({
 
       setTimeout(() => {
         wx.navigateBack({
-          delta: this.data.leftScore + app.globalData.userInfo.score
+          delta: 2
         })
       }, 2000)
       return

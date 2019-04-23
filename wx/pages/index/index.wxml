@@ -29,8 +29,8 @@
       <image class='leader-board-img' src="../../assets/img/leaderboard.png"></image>
     </view>
 
-    <view class='con store'>
-      <view class='mod-title2'>签到</view>
+    <view class='con store' bindtap='gotoGiftbag'>
+      <view class='mod-title2' >礼包</view>
       <image class='store-img' src="../../assets/img/store.png"></image>
     </view>
 
@@ -39,7 +39,7 @@
       <image class='friendBattle-img' src="../../assets/img/factory.png"></image>
     </view>
 
-    <view class='con bank'>
+    <view class='con bank' bindtap='gotoHistory'>
       <view class='mod-title1'>历史记录</view>
       <image class='bank-img' src="../../assets/img/history.png"></image>
     </view>

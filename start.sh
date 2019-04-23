@@ -3,8 +3,7 @@ echo "更新代码"
 git pull
 
 echo "安装依赖"
-{ cd ./service-node;npm install; }
-{ cd ./service-socket;npm install; }
+{ npm install; }
 
 cd ../
 echo "启动服务器"

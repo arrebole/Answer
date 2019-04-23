@@ -1,5 +1,5 @@
 const Redis = require('ioredis');
-const DBNumber = 3;
+const DBNumber = 6;
 let database = null; // 数据库连接池
 
 // 数据库连接配置

@@ -1,6 +1,7 @@
 const Router = require('koa-router');
 const Sign = require("../sign");
 const RedisClients = require("../db");
+const chinaTime = require('china-time');
 const { createNewUserInfo, createUpdateUserInfo } = require("../utils/userInfo")
 
 
@@ -9,13 +10,14 @@ const { createNewUserInfo, createUpdateUserInfo } = require("../utils/userInfo")
 const router = new Router(); // 路由中间件
 const accountDB = RedisClients.getTable(0);
 const rankingDB = RedisClients.getTable(2);
+const historyDB = RedisClients.getTable(5);
 
-// 创建新用户数据
-async function HsetUserAll(User,db) {
+// 更新用户数据
+async function HsetUserAll(User, db) {
     let key = User.userName;
     let uid = await db.dbsize();
     User.uid = uid.toString()
-    console.log("创建新用户",User)
+    console.log("更新用户数据", User)
     return db.pipeline([
         ['hset', key, 'userName', User.userName],
         ['hset', key, 'score', User.score],
@@ -37,7 +39,7 @@ router.get('/:userName', async (ctx, next) => {
     // 如果不存在数据则创建用户
     if (Object.keys(userInfo).length <= 1) {
         console.log("不存在的账户，正在创建 %s...", userName)
-        await HsetUserAll(createNewUserInfo(userName),accountDB)
+        await HsetUserAll(createNewUserInfo(userName), accountDB)
 
         userInfo = await accountDB.hgetall(userName);
     }
@@ -59,13 +61,16 @@ router.post('/:userName', async (ctx, next) => {
     }
 
     // 如果存在提交分数则同步排行榜 db
-    if ( postUserInfo.hasOwnProperty("score")) {
-        console.log("更新排行榜数据",userName)
-        await rankingDB.zadd("ranking",parseInt(postUserInfo["score"]),userName);
+    if (postUserInfo.hasOwnProperty("score")) {
+        console.log("更新排行榜数据", userName)
+        await rankingDB.zadd("ranking", parseInt(postUserInfo["score"]), userName);
+        console.log("更新历史记录", userName)
+        let c = parseInt(postUserInfo["score"]) - parseInt(localUserInfo["score"])
+        await historyDB.hset(userName, chinaTime('YYYY-MM-DD HH:mm:ss'), c.toString());
     }
 
     // 更新用户数据库
-    await HsetUserAll(createUpdateUserInfo(localUserInfo, postUserInfo),accountDB)//更新旧信息
+    await HsetUserAll(createUpdateUserInfo(localUserInfo, postUserInfo), accountDB)//更新旧信息
     let newUserInfo = await accountDB.hgetall(userName);//获取新信息
 
     // 返回更新后的用户数据
