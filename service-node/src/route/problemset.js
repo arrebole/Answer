@@ -10,8 +10,9 @@ const auditProblemsetDB = RedisClient.getTable(4);
 
 // 获取数据库中一共有多少题目 返回 number类型
 async function queryProblemsetSize() {
-    let dbsize = await problemsetDB.dbsize();
-    return dbsize;
+    let dbsize1 = await problemsetDB.dbsize();
+    let dbsize2 = await auditProblemsetDB.dbsize();
+    return dbsize1 + dbsize2;
 }
 
 // 获取数据库中所有题目的id 返回 Array类型
