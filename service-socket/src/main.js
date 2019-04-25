@@ -72,7 +72,7 @@ app.on('connection', function connection(ws, request) {
  * @param {String} ip 
  */
 function startGame(ip) {
-    console.log("++++++++游戏开始+++++++++")
+    
     let one = queue.get(ip);
     let two = null;
 
@@ -89,7 +89,7 @@ function startGame(ip) {
     if (two == null) {
         return;
     }
-
+    console.log("++++++++游戏开始+++++++++")
     console.log(`成功匹配用户 ${one.userInfo.userName} vs ${two.userInfo.userName}`)
     queue.delete(one.ip);
     queue.delete(two.ip);

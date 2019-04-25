@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('ws://gkdark.xyz:3000/websocket/');
+const ws = new WebSocket('ws://gkdark.geektr.co/websocket/');
 
 ws.on('open', function open() {
   

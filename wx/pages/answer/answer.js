@@ -8,7 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    timer: 5,
+    timer: 6,
+    interval: null,
     //题目数量
     limit: 8,
     isStart: false,
@@ -53,23 +54,25 @@ Page({
   // 关闭页面时关闭socket
   onUnload: function () {
     this.data.socketTask.close();
+    if (this.data.interval != null){
+      clearInterval(this.data.interval);
+    }
+    
   },
   // 减少时间
   reduceTime() {
-    setTimeout(() => {
-      if (this.data.timer > 0) {
+    this.setData({
+      interval: setInterval(() => {
+        if (this.data.timer <= 0) {
+          this.changeLocalProblem()
+        }
         this.setData({
           timer: this.data.timer - 1
         })
-        this.reduceTime()
-      } else {
-        this.setData({
-          timer: 6
-        })
-        this.changeLocalProblem()
-      }
 
-    }, 1000)
+      }, 1000)
+    })
+
   },
 
   // 连接socket
@@ -218,9 +221,12 @@ Page({
     }
     this.setData({
       localProblem: this.data.problemset[this.data.local],
-      local: this.data.local + 1
+      local: this.data.local + 1,
+      timer:6
     })
-    this.reduceTime()
+   
+ 
+
   },
 
 })
