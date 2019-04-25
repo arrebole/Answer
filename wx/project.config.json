@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -15,7 +15,7 @@
 	},
 	"compileType": "game",
 	"libVersion": "2.6.6",
-	"appid": "wxf899e6338ce834e7",
+	"appid": "wx02ce622bf06384bf",
 	"projectname": "Answer",
 	"cloudfunctionTemplateRoot": "",
 	"debugOptions": {

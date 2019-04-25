@@ -1,12 +1,12 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('ws://127.0.0.1:3000');
+const ws = new WebSocket('ws://gkdark.xyz:3000/websocket/');
 
 ws.on('open', function open() {
   
   let data = {
     code:"100",
-    userName:"xxx",
+    userName:"root",
     avatarUrl:"xxxxxxx",
     uid:"12",
   }

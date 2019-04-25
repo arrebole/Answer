@@ -2,9 +2,10 @@
 const WebSocket = require('ws');
 const https = require("https");
 const axios = require("axios");
+const chinaTime = require('china-time');
 const { SocketConnection, Identification, Problemset, SyncScore } = require("./utils");
 
-const host = "0.0.0.0";
+const host = "127.0.0.1";
 const port = 3000;
 const app = new WebSocket.Server({ host, port });
 
@@ -23,7 +24,7 @@ const agent = new https.Agent({
 // 监听
 app.on('connection', function connection(ws, request) {
 
-    const IP = request.connection.remoteAddress + ":" + request.connection.remotePort;
+    const IP = chinaTime('YYYY-MM-DD HH:mm:ss') + ":" + request.connection.remoteAddress + ":" + request.connection.remotePort;
 
 
     // 监听客户端打开socket
@@ -113,21 +114,21 @@ function startGame(ip) {
 // 同步客户端分数
 function SyncClientScore(scoreInfo) {
     let score = JSON.stringify(new SyncScore(scoreInfo.score, scoreInfo.userName, scoreInfo.uid))
-    app.clients.forEach((client)=>{
+    app.clients.forEach((client) => {
         client.send(score);
     })
 }
 
 //获取本机ip
 function getIPAdress() {
-    var interfaces = require('os').networkInterfaces();　　
-    for (var devName in interfaces) {　　　　
-        var iface = interfaces[devName];　　　　　　
+    var interfaces = require('os').networkInterfaces();
+    for (var devName in interfaces) {
+        var iface = interfaces[devName];
         for (var i = 0; i < iface.length; i++) {
             var alias = iface[i];
             if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
                 return alias.address;
             }
-        }　　
+        }
     }
 }

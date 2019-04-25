@@ -77,7 +77,7 @@ Page({
     // 连接socket
     //this.socketTask = 
     let socket = wx.connectSocket({
-      url: `ws://${api.host}:3000`,
+      url: `wss://${api.host}/websocket/`,
       header: {
         'content-type': 'application/json'
       },
