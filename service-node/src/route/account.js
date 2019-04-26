@@ -66,7 +66,10 @@ router.post('/:userName', async (ctx, next) => {
         await rankingDB.zadd("ranking", parseInt(postUserInfo["score"]), userName);
         console.log("更新历史记录", userName)
         let c = parseInt(postUserInfo["score"]) - parseInt(localUserInfo["score"])
-        await historyDB.hset(userName, chinaTime('YYYY-MM-DD HH:mm:ss'), c.toString());
+        if (c>0){
+            await historyDB.hset(userName, chinaTime('YYYY-MM-DD HH:mm:ss'), c.toString());
+        }
+       
     }
 
     // 更新用户数据库

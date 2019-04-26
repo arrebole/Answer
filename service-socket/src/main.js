@@ -80,7 +80,7 @@ function startGame(ip) {
     let i = null
     for (let item of queue) {
         i = item[1];
-        if (i.level == one.level && i.ip != one.ip && i.userInfo.userName != one.userInfo.userName && !i.isStartGame) {
+        if (i.ip != one.ip && i.userInfo.userName != one.userInfo.userName && !i.isStartGame) {
             two = i;
             break;
         }
