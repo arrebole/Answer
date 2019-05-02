@@ -1,7 +1,4 @@
 # linux 自动安装化脚本
-echo "更新代码"
-git pull
-
 echo "安装依赖"
 { npm install; }
 

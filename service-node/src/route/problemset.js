@@ -9,7 +9,7 @@ const problemsetDB = RedisClient.getTable(1);
 const auditProblemsetDB = RedisClient.getTable(4);
 
 // 获取数据库中一共有多少题目 返回 number类型
-async function queryProblemsetSize() {
+async function queryProblemsetAllSize() {
     let dbsize1 = await problemsetDB.dbsize();
     let dbsize2 = await auditProblemsetDB.dbsize();
     return dbsize1 + dbsize2;
@@ -49,7 +49,7 @@ async function QueryProblemset(limit) {
 // 往审核数据库中添加题目
 async function addSQLProblemset(probmemset, db) {
     // 生成问题 id ，id为已有题目数量+1
-    let dbsize = await queryProblemsetSize()
+    let dbsize = await queryProblemsetAllSize()
     let id = (dbsize).toString();
 
     // 生成sql语句
@@ -67,7 +67,9 @@ async function addSQLProblemset(probmemset, db) {
 router.get('/get', async (ctx, next) => {
     // 获取请求题目数量
     let limit = ctx.request.query['limit'] || 8;
-
+    if (limit == "all") {
+        limit = await problemsetDB.dbsize();
+    }
     let problemset = await QueryProblemset(limit);
 
     // 整理数据
@@ -84,6 +86,14 @@ router.get('/get', async (ctx, next) => {
 router.post("/add", async (ctx, next) => {
     let newProblemset = ctx.request.body
     await addSQLProblemset(newProblemset, auditProblemsetDB);
+    ctx.body = Sign.success;
+})
+
+//删除题目
+router.get("/delete/:id", async (ctx, next) => {
+    // 获取需要删除的题目id
+    let id = ctx.params["id"];
+    await problemsetDB.hdel(id);
     ctx.body = Sign.success;
 })
 

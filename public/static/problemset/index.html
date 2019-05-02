@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="app">
+        <header>
+            <nav>
+                <a href="/check/index.html">题目审核</a>
+                <a href="/problemset/index.html">题库管理</a>
+            </nav>
+        </header>
+        <section v-for="(value,index) in Problemset" :key="index" class="blemset">
+            <div>题目： {{ value.topic }} </div>
+            <div>答案： {{ value.solution }} </div>
+            <div>A选项： {{ value.optionA }} </div>
+            <div>B选项： {{ value.optionB }} </div>
+            <div>C选项： {{ value.optionC }} </div>
+            <div>D选项： {{ value.optionD }} </div>
+            <button type="submit" @click="bindSubmit(value.id)">删除</button>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                Problemset: []
+            },
+            created() {
+                this.getProblemset().then((res) => {
+                    console.log(res)
+                    this.Problemset = res;
+                })
+            },
+            methods: {
+                getProblemset() {
+                    return fetch('/api/problemset/get?limit=all').then((response) => {
+                        return response.json();
+                    })
+                },
+                delete(id) {
+                    return fetch(`/api/problemset/delete/${id}`).then((response) => {
+                        return response.json();
+                    })
+                },
+                bindSubmit(id) {
+                    this.delete(id);
+                    window.location.reload();
+                }
+
+            }
+        })
+    </script>
+
+</body>
+
+</html>

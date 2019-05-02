@@ -1,67 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>审核题目</title>
-    <style>
-        .problemset {
-            border: 1px solid rgb(126, 126, 126);
-            padding: 10px;
-            margin: 10px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style/main.css">
 </head>
-
 <body>
-
-    <div id="app">
-        <section v-for="(value,index) in needAuditProblemset" :key="index" class="problemset">
-            <div>题目： {{ value.topic }} </div>
-            <div>答案： {{ value.solution }} </div>
-            <div>A选项： {{ value.optionA }} </div>
-            <div>B选项： {{ value.optionB }} </div>
-            <div>C选项： {{ value.optionC }} </div>
-            <div>D选项： {{ value.optionD }} </div>
-            <button type="submit" @click="bindSubmit(value.id)">通过审核</button>
-        </section>
+    <header>
+        <nav>
+            <a href="/check/index.html">题目审核</a>
+            <a href="/problemset/index.html">题库管理</a>
+        </nav>
+    </header>
+    <article class="index-main">
+        <div class="vertical-center">
+        <h1 class="text-center">知识竞答学习管理页面</h1>
     </div>
-    <!--  -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-    <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                needAuditProblemset: []
-            },
-            created() {
-                this.getNeedReviewProblemset().then((res) => {
-                    console.log(res)
-                    this.needAuditProblemset = res;
-                })
-            },
-            methods: {
-                getNeedReviewProblemset() {
-                    return fetch('/api/problemset/audit').then((response) => {
-                        return response.json();
-                    })
-                },
-                goPass(id) {
-                    return fetch(`/api/problemset/audit/${id}`).then((response) => {
-                        return response.json();
-                    })
-                },
-                bindSubmit(id) {
-                    this.goPass(id);
-                    window.location.reload();
-
-                }
-
-            }
-        })
-    </script>
-
+    </article>
 </body>
-
 </html>
