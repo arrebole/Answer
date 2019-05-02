@@ -64,12 +64,23 @@ async function QueryProblemset(limit) {
     return problemsetDB.pipeline(sql).exec();
 }
 
+// 获取所有题目
+async function QueryAllProblemset() {
+    let dbkeys = await queryProblemsetKeys()
+    let sql = []
+    for (let i of dbkeys) {
+        sql.push(['hgetall', i])
+    }
+    return problemsetDB.pipeline(sql).exec();
+}
+
+
 // 往审核数据库中添加题目
 async function addSQLProblemset(probmemset, db) {
     // 生成问题 id ，id为已有题目数量+1
     let dbId = await queryProblemsetNextId()
     await problemsetNextIdIncrease();
-    
+
     let id = (dbId).toString();
 
     // 生成sql语句
@@ -87,10 +98,15 @@ async function addSQLProblemset(probmemset, db) {
 router.get('/get', async (ctx, next) => {
     // 获取请求题目数量
     let limit = ctx.request.query['limit'] || 8;
+    let problemset;
+
     if (limit == "all") {
-        limit = await problemsetDB.dbsize();
+        problemset = await QueryAllProblemset();
+
+    } else {
+        problemset = await QueryProblemset(limit);
     }
-    let problemset = await QueryProblemset(limit);
+
 
     // 整理数据
     let arrangeProblemset = []
