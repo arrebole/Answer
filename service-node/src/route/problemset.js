@@ -6,6 +6,7 @@ const router = new Router();
 
 // redis客户端
 const problemsetDB = RedisClient.getTable(1);
+const ProblemsetIDDB = RedisClient.getTable(6);
 const auditProblemsetDB = RedisClient.getTable(4);
 
 // 获取数据库中一共有多少题目 返回 number类型
@@ -16,7 +17,7 @@ async function queryProblemsetAllSize() {
 }
 
 async function queryProblemsetNextId() {
-    let localId = await problemsetDB.get("total");
+    let localId = await ProblemsetIDDB.get("total");
     if (localId == null) {
         await problemsetDB.set("total", 0);
     }
@@ -24,7 +25,7 @@ async function queryProblemsetNextId() {
 }
 
 async function problemsetNextIdIncrease() {
-    let localId = await problemsetDB.get("total");
+    let localId = await ProblemsetIDDB.get("total");
     if (localId == null) {
         await problemsetDB.set("total", 0);
         return;
@@ -101,6 +102,7 @@ router.get('/get', async (ctx, next) => {
     let problemset;
 
     if (limit == "all") {
+        console.log("获取全部题目")
         problemset = await QueryAllProblemset();
 
     } else {
