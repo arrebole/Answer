@@ -19,15 +19,15 @@ async function queryProblemsetAllSize() {
 async function queryProblemsetNextId() {
     let localId = await ProblemsetIDDB.get("total");
     if (localId == null) {
-        await problemsetDB.set("total", 0);
+        await ProblemsetIDDB.set("total", 0);
     }
-    return (await problemsetDB.get("total")) + 1;
+    return (await ProblemsetIDDB.get("total")) + 1;
 }
 
 async function problemsetNextIdIncrease() {
     let localId = await ProblemsetIDDB.get("total");
     if (localId == null) {
-        await problemsetDB.set("total", 0);
+        await ProblemsetIDDB.set("total", 0);
         return;
     }
     await problemsetDB.incr("total");
