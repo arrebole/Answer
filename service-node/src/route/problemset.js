@@ -77,7 +77,7 @@ async function QueryAllProblemset() {
 
 
 // 往审核数据库中添加题目
-async function addSQLProblemset(probmemset, db) {
+async function addSQLProblemset(probmemset) {
     // 生成问题 id ，id为已有题目数量+1
     let dbId = await queryProblemsetNextId()
     await problemsetNextIdIncrease();
@@ -90,7 +90,7 @@ async function addSQLProblemset(probmemset, db) {
     for (let k of keys) {
         sql.push(['hset', id, k, probmemset[k]])
     }
-    return db.pipeline(sql).exec()
+    return auditProblemsetDB.pipeline(sql).exec()
 }
 
 // problemset分路由
@@ -123,7 +123,9 @@ router.get('/get', async (ctx, next) => {
 // 添加题目
 router.post("/add", async (ctx, next) => {
     let newProblemset = ctx.request.body
-    await addSQLProblemset(newProblemset, auditProblemsetDB);
+    console.log("添加审核题目")
+    console.log(newProblemset);
+    await addSQLProblemset(newProblemset);
     ctx.body = Sign.success;
 })
 
