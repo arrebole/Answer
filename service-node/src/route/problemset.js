@@ -15,6 +15,24 @@ async function queryProblemsetAllSize() {
     return dbsize1 + dbsize2;
 }
 
+async function queryProblemsetNextId() {
+    let localId = await problemsetDB.get("total");
+    if (localId == null) {
+        await problemsetDB.set("total", 0);
+    }
+    return (await problemsetDB.get("total")) + 1;
+}
+
+async function problemsetNextIdIncrease() {
+    let localId = await problemsetDB.get("total");
+    if (localId == null) {
+        await problemsetDB.set("total", 0);
+        return;
+    }
+    await problemsetDB.incr("total");
+}
+
+
 // 获取数据库中所有题目的id 返回 Array类型
 async function queryProblemsetKeys() {
     let keys = await problemsetDB.keys("*")
@@ -49,8 +67,10 @@ async function QueryProblemset(limit) {
 // 往审核数据库中添加题目
 async function addSQLProblemset(probmemset, db) {
     // 生成问题 id ，id为已有题目数量+1
-    let dbsize = await queryProblemsetAllSize()
-    let id = (dbsize).toString();
+    let dbId = await queryProblemsetNextId()
+    await problemsetNextIdIncrease();
+    
+    let id = (dbId).toString();
 
     // 生成sql语句
     let sql = [['hset', id, 'id', id]]
@@ -93,7 +113,7 @@ router.post("/add", async (ctx, next) => {
 router.get("/delete/:id", async (ctx, next) => {
     // 获取需要删除的题目id
     let id = ctx.params["id"];
-    await problemsetDB.hdel(id);
+    await problemsetDB.del(id);
     ctx.body = Sign.success;
 })
 

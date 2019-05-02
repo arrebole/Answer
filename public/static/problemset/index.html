@@ -16,7 +16,7 @@
                 <a href="/problemset/index.html">题库管理</a>
             </nav>
         </header>
-        <section v-for="(value,index) in Problemset" :key="index" class="blemset">
+        <section v-for="(value,index) in Problemset" :key="index" class="problemset">
             <div>题目： {{ value.topic }} </div>
             <div>答案： {{ value.solution }} </div>
             <div>A选项： {{ value.optionA }} </div>
