@@ -61,20 +61,23 @@ router.post('/:userName', async (ctx, next) => {
     }
 
     // 如果存在提交分数则同步排行榜 db
-    if (postUserInfo.hasOwnProperty("score")) {
+    if (postUserInfo.hasOwnProperty("score") && postUserInfo["score"] != "0") {
         console.log("更新排行榜数据", userName)
         await rankingDB.zadd("ranking", parseInt(postUserInfo["score"]), userName);
         console.log("更新历史记录", userName)
         let c = parseInt(postUserInfo["score"]) - parseInt(localUserInfo["score"])
-        if (c>0){
+        if (c > 0) {
             await historyDB.hset(userName, chinaTime('YYYY-MM-DD HH:mm:ss'), c.toString());
         }
-       
+
     }
 
     // 更新用户数据库
-    await HsetUserAll(createUpdateUserInfo(localUserInfo, postUserInfo), accountDB)//更新旧信息
-    let newUserInfo = await accountDB.hgetall(userName);//获取新信息
+    let newUserInfo = null;
+    if (postUserInfo["score"] != "0") {
+        await HsetUserAll(createUpdateUserInfo(localUserInfo, postUserInfo), accountDB)//更新旧信息
+        newUserInfo = await accountDB.hgetall(userName);//获取新信息
+    }
 
     // 返回更新后的用户数据
     ctx.body = JSON.stringify(newUserInfo);
